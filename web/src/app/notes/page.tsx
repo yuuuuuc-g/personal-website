@@ -2,9 +2,10 @@ import Link from "next/link";
 import { StatusBadge } from "@/components/StatusBadge";
 import { sanityFetch } from "@/sanity/lib/live";
 import { NOTES_INDEX_QUERY } from "@/sanity/queries";
+import type { NoteListItem } from "@/sanity/types";
 
 export default async function NotesIndexPage() {
-  const { data: notes } = await sanityFetch({ query: NOTES_INDEX_QUERY });
+  const { data: notes } = await sanityFetch<NoteListItem[]>({ query: NOTES_INDEX_QUERY });
 
   return (
     <>

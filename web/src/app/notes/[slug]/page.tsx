@@ -5,6 +5,7 @@ import { portableTextComponents } from "@/components/PortableTextComponents";
 import { StatusBadge } from "@/components/StatusBadge";
 import { sanityFetch } from "@/sanity/lib/live";
 import { NOTE_QUERY } from "@/sanity/queries";
+import type { Backlink, NoteDetail } from "@/sanity/types";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -12,7 +13,7 @@ type Props = {
 
 export default async function NotePage({ params }: Props) {
   const { slug } = await params;
-  const { data: note } = await sanityFetch({
+  const { data: note } = await sanityFetch<NoteDetail | null>({
     query: NOTE_QUERY,
     params: { slug },
   });
@@ -68,7 +69,7 @@ export default async function NotePage({ params }: Props) {
               {note.backlinks.map((backlink) => (
                 <Link
                   className="item"
-                  href={`/${backlink._type === "topic" ? "topics" : "notes"}/${backlink.slug}`}
+                  href={`/${routeForBacklink(backlink)}/${backlink.slug}`}
                   key={backlink._id}
                 >
                   <h3>{backlink.title}</h3>
@@ -81,4 +82,16 @@ export default async function NotePage({ params }: Props) {
       </main>
     </>
   );
+}
+
+function routeForBacklink(backlink: Backlink) {
+  if (backlink._type === "topic") {
+    return "topics";
+  }
+
+  if (backlink._type === "essay") {
+    return "essays";
+  }
+
+  return "notes";
 }

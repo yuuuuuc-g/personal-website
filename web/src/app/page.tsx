@@ -2,9 +2,10 @@ import Link from "next/link";
 import { StatusBadge } from "@/components/StatusBadge";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_QUERY } from "@/sanity/queries";
+import type { HomeData } from "@/sanity/types";
 
 export default async function HomePage() {
-  const { data } = await sanityFetch({ query: HOME_QUERY });
+  const { data } = await sanityFetch<HomeData>({ query: HOME_QUERY });
   const settings = data?.settings;
   const latestNotes = data?.latestNotes || [];
   const topics = data?.topics || [];

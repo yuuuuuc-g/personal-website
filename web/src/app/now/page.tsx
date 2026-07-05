@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { sanityFetch } from "@/sanity/lib/live";
 import { NOW_QUERY } from "@/sanity/queries";
+import type { SiteSettings } from "@/sanity/types";
 
 export default async function NowPage() {
-  const { data: settings } = await sanityFetch({ query: NOW_QUERY });
+  const { data: settings } = await sanityFetch<SiteSettings | null>({ query: NOW_QUERY });
 
   return (
     <>
