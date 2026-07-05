@@ -1,0 +1,19 @@
+agent: codex
+
+commands:
+  test: "pnpm test"
+  lint: "pnpm lint && pnpm typecheck && pnpm build"
+  format: "pnpm format"
+
+ignore_patterns:
+  - "node_modules/**"
+  - "web/.next/**"
+  - "web/out/**"
+  - "studio/dist/**"
+  - ".vercel/**"
+
+auto_fix:
+  lint: 3
+  test: 2
+  document: 2
+  review: 0
