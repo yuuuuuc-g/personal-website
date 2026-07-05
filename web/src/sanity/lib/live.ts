@@ -1,16 +1,31 @@
+import type { ClientPerspective, QueryParams } from "@sanity/client";
+import { defineLive } from "next-sanity/live";
 import { client } from "./client";
+import { apiVersion } from "./env";
 
 type SanityFetchOptions = {
   query: string;
-  params?: Record<string, unknown>;
+  params?: QueryParams | Promise<QueryParams>;
+  tags?: string[];
+  perspective?: Exclude<ClientPerspective, "raw">;
+  stega?: boolean;
+  requestTag?: string;
 };
 
-export async function sanityFetch<T>({ query, params = {} }: SanityFetchOptions) {
-  const data = await client.fetch<T>(query, params);
+const live = defineLive({
+  client: client.withConfig({ apiVersion }),
+  serverToken: process.env.SANITY_API_READ_TOKEN,
+  browserToken: process.env.SANITY_API_READ_TOKEN,
+});
 
-  return { data };
-}
+export const SanityLive = live.SanityLive;
 
-export function SanityLive() {
-  return null;
+export async function sanityFetch<T>({
+  query,
+  params = {},
+  ...options
+}: SanityFetchOptions) {
+  const result = await live.sanityFetch({ query, params, ...options });
+
+  return { ...result, data: result.data as T };
 }
