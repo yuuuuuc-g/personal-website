@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TOPICS_INDEX_QUERY } from "@/sanity/queries";
+import type { TopicIndexItem } from "@/sanity/types";
 
 export default async function TopicsIndexPage() {
-  const { data: topics } = await sanityFetch({ query: TOPICS_INDEX_QUERY });
+  const { data: topics } = await sanityFetch<TopicIndexItem[]>({ query: TOPICS_INDEX_QUERY });
 
   return (
     <>

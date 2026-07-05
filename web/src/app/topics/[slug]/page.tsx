@@ -5,6 +5,7 @@ import { portableTextComponents } from "@/components/PortableTextComponents";
 import { StatusBadge } from "@/components/StatusBadge";
 import { sanityFetch } from "@/sanity/lib/live";
 import { TOPIC_QUERY } from "@/sanity/queries";
+import type { TopicDetail } from "@/sanity/types";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -12,7 +13,7 @@ type Props = {
 
 export default async function TopicPage({ params }: Props) {
   const { slug } = await params;
-  const { data: topic } = await sanityFetch({
+  const { data: topic } = await sanityFetch<TopicDetail | null>({
     query: TOPIC_QUERY,
     params: { slug },
   });

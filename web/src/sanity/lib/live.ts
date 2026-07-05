@@ -1,9 +1,16 @@
-import { defineLive } from "next-sanity";
 import { client } from "./client";
-import { apiVersion } from "./env";
 
-export const { sanityFetch, SanityLive } = defineLive({
-  client: client.withConfig({ apiVersion }),
-  serverToken: process.env.SANITY_API_READ_TOKEN,
-  browserToken: process.env.SANITY_API_READ_TOKEN,
-});
+type SanityFetchOptions = {
+  query: string;
+  params?: Record<string, unknown>;
+};
+
+export async function sanityFetch<T>({ query, params = {} }: SanityFetchOptions) {
+  const data = await client.fetch<T>(query, params);
+
+  return { data };
+}
+
+export function SanityLive() {
+  return null;
+}

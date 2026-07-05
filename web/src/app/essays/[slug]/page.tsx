@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { portableTextComponents } from "@/components/PortableTextComponents";
 import { sanityFetch } from "@/sanity/lib/live";
 import { ESSAY_QUERY } from "@/sanity/queries";
+import type { EssayDetail } from "@/sanity/types";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -11,7 +12,7 @@ type Props = {
 
 export default async function EssayPage({ params }: Props) {
   const { slug } = await params;
-  const { data: essay } = await sanityFetch({
+  const { data: essay } = await sanityFetch<EssayDetail | null>({
     query: ESSAY_QUERY,
     params: { slug },
   });
